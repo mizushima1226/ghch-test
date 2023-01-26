@@ -1,8 +1,10 @@
 name: Generate Change Log
 
 on:
-  # pull_request:
-  #   types: [opened]
+  pull_request:
+    types: [opened]
+    branches:
+      - 'main'
   workflow_dispatch:
 
 jobs:
@@ -12,7 +14,19 @@ jobs:
       - name: Print Payload
         run: cat $GITHUB_EVENT_PATH
       - name: Current Directory
-        run: pwd; ls;
+        run: ls
+      - uses: actions/checkout@v3
+        with:
+          ref: main
+          fetch-depth: 0
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.18
+      - name: Get Package
+        run: go install github.com/Songmu/ghch/cmd/ghch@latest
+      - name: Git diff
+        run: git diff
       - name: Generate
         run: |
           generated=$(ghch --latest)
@@ -22,7 +36,20 @@ jobs:
           filter_empty=$(echo $filter_untaged | jq '. | select(.pull_requests | length != 0)')
           filter_type=$(echo $filter_empty | jq 'del(. | .pull_requests[] | select(.title | test("(feat|fix)") | not))')
           result=$(echo $filter_type | jq -s .)
-          echo $result
-          # echo $result > latest_changelog.json
-          # jq -s '.[0] + .[1]' latest_changelog.json changelog.json > pre_generated.json
-          # mv pre_generated.json changelog.json
+          echo $result > latest_changelog.json
+          cat latest_changelog.json
+          jq -s '.[0] + .[1]' latest_changelog.json changelog.json > pre_generated.json
+          mv pre_generated.json changelog.json
+          cat changelog.json
+      - name: Git commit
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit -m "chore: generate changelog"
+          git push origin main
+      - name: Save Cangelog
+        uses: actions/upload-artifact@v2
+        with:
+          name: changelog
+          path: ./
