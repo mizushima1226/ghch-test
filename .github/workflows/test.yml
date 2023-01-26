@@ -22,7 +22,7 @@ jobs:
       - name: Get Package
         run: go install github.com/Songmu/ghch/cmd/ghch@latest
       - name: Generate Change Log
-        run: >
+        run: |
           echo ghch --all
           generated=$(ghch --all)
           echo $generated
