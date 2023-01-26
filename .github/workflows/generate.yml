@@ -12,7 +12,7 @@ jobs:
       - name: Print Payload
         run: cat $GITHUB_EVENT_PATH
       - name: Current Directory
-        run: pwd
+        run: ls
       - uses: actions/checkout@v3
         with:
           ref: main
@@ -23,6 +23,8 @@ jobs:
           go-version: 1.18
       - name: Get Package
         run: go install github.com/Songmu/ghch/cmd/ghch@latest
+      - name: Git diff
+        run: git diff
       - name: Generate
         run: |
           generated=$(ghch --latest)
@@ -39,7 +41,7 @@ jobs:
           cat changelog.json
           cat latest_changelog.json
           git diff
-      - name: save generated file
+      - name: Save generated file
         uses: actions/upload-artifact@v2
         with:
           name: changelog
