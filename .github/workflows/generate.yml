@@ -39,3 +39,8 @@ jobs:
           cat changelog.json
           cat latest_changelog.json
           git diff
+      - name: save generated file
+        uses: actions/upload-artifact@v2
+        with:
+          name: changelog
+          path: ./changelog.json
