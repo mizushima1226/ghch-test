@@ -39,7 +39,12 @@ jobs:
           jq -s '.[0] + .[1]' latest_changelog.json changelog.json > pre_generated.json
           mv pre_generated.json changelog.json
           cat changelog.json
-          git diff
+      - name: Git commit
+        run: |
+          git log --oneline -n5
+          git add .
+          git commit -m "chore: generate changelog"
+          git log --oneline -n5
       - name: Save Cangelog
         uses: actions/upload-artifact@v2
         with:
