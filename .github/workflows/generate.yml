@@ -34,10 +34,9 @@ jobs:
         run: |
           git config user.name $user_name
           git config user.email $user_email
-
-          echo "git setup!!"
           
           tag_stg=stg.latest
+          set +e
           git tag | grep $tag_stg 2>/dev/null
           
           echo "grep_result"
@@ -55,6 +54,7 @@ jobs:
             git tag -d $tag_stg
             git push origin --delete $tag_stg
           fi
+          set -e
 
           git tag $tag_stg
           git push origin $tag_stg
