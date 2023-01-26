@@ -33,6 +33,9 @@ jobs:
           filter_type=$(echo $filter_empty | jq 'del(. | .pull_requests[] | select(.title | test("(feat|fix)") | not))')
           result=$(echo $filter_type | jq -s .)
           echo $result
-          # echo $result > latest_changelog.json
-          # jq -s '.[0] + .[1]' latest_changelog.json changelog.json > pre_generated.json
-          # mv pre_generated.json changelog.json
+          echo $result > latest_changelog.json
+          jq -s '.[0] + .[1]' latest_changelog.json changelog.json > pre_generated.json
+          mv pre_generated.json changelog.json
+          cat changelog.json
+          cat latest_changelog.json
+          git diff
