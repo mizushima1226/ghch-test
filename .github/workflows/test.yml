@@ -22,10 +22,11 @@ jobs:
       - name: Get Package
         run: go install github.com/Songmu/ghch/cmd/ghch@latest
       - name: Generate Change Log
-        run: generated=$(ghch --all) \
-              filtered=$(echo $generated | jq '.Sections[] | { changed_at: .changed_at, from_revision: .from_revision, to_revision: .to_revision, pull_requests: .pull_requests | map({title: .title}) }') \
-              filter_untaged=$(echo $filtered | jq '. | select(.to_revision != "")') \
-              filter_empty=$(echo $filter_untaged | jq '. | select(.pull_requests | length != 0)') \
-              filter_type=$(echo $filter_empty | jq 'del(. | .pull_requests[] | select(.title | test("(feat|fix)") | not))') \
+        run: >
+          generated=$(ghch --all)
+          filtered=$(echo $generated | jq '.Sections[] | { changed_at: .changed_at, from_revision: .from_revision, to_revision: .to_revision, pull_requests: .pull_requests | map({title: .title}) }')
+          filter_untaged=$(echo $filtered | jq '. | select(.to_revision != "")')
+          filter_empty=$(echo $filter_untaged | jq '. | select(.pull_requests | length != 0)')
+          filter_type=$(echo $filter_empty | jq 'del(. | .pull_requests[] | select(.title | test("(feat|fix)") | not))')
       - name: Print Generated
         run: echo $filter_type
