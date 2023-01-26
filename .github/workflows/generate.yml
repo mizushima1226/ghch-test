@@ -11,6 +11,9 @@ jobs:
   generate:
     runs-on: ubuntu-latest
     steps:
+      - uses: szenius/set-timezone@v1.0
+        with:
+          timezoneLinux: "Asia/Tokyo"
       - name: Print Payload
         run: cat $GITHUB_EVENT_PATH
       - uses: actions/checkout@v3
@@ -25,11 +28,11 @@ jobs:
         run: go install github.com/Songmu/ghch/cmd/ghch@latest
       - name: Git tag
         run: |
-          git config user.name mizushima1226 
+          git config user.name mizushima1226
           git config user.email mizuki.bz.3224@gmail.com
-          git add .
+
           tag_stg=stg.temp
-          git tag | grep stg.temp
+          git tag | grep $tag_stg
 
           # stg.tempタグが存在する場合、最新コミットにタグを付け替え
           if [ $? = 0 ]; then
@@ -53,26 +56,24 @@ jobs:
       - name: Generate
         run: |
           generated=$(ghch --latest)
-          # generated=$(ghch --from=20230101.12.24 --to=20230115.15.37)
           filtered=$(echo $generated | jq '. | { changed_at: .changed_at, from_revision: .from_revision, to_revision: .to_revision, pull_requests: .pull_requests | map({title: .title}) }')
-          filter_untaged=$(echo $filtered | jq '. | select(.to_revision != "")')
-          filter_empty=$(echo $filter_untaged | jq '. | select(.pull_requests | length != 0)')
+          filter_untagged=$(echo $filtered | jq '. | select(.to_revision != "")')
+          filter_empty=$(echo $filter_untagged | jq '. | select(.pull_requests | length != 0)')
           filter_type=$(echo $filter_empty | jq 'del(. | .pull_requests[] | select(.title | test("(feat|fix)") | not))')
           result=$(echo $filter_type | jq -s .)
+
           echo $result > latest_changelog.json
-          cat latest_changelog.json
           jq -s '.[0] + .[1]' latest_changelog.json changelog.json > pre_generated.json
           mv pre_generated.json changelog.json
-          cat changelog.json
       # TODO: git user
       - name: Git commit
         run: |
-          git config user.name mizushima1226 
+          git config user.name mizushima1226
           git config user.email mizuki.bz.3224@gmail.com
           git add .
           git commit -m "chore: generate changelog"
           git push origin main
-      - name: Save Cangelog
+      - name: Save Changelog
         uses: actions/upload-artifact@v2
         with:
           name: changelog
