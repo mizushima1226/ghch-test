@@ -1,8 +1,10 @@
 name: Generate Change Log
 
 on:
-  # pull_request:
-  #   types: [opened]
+  pull_request:
+    types: [opened]
+    branches:
+      - 'main'
   workflow_dispatch:
 
 jobs:
@@ -43,10 +45,9 @@ jobs:
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
-          git log --oneline -n5
           git add .
           git commit -m "chore: generate changelog"
-          git log --oneline -n5
+          git push origin main
       - name: Save Cangelog
         uses: actions/upload-artifact@v2
         with:
