@@ -30,4 +30,9 @@ jobs:
           filter_untaged=$(echo $filtered | jq '. | select(.to_revision != "")')
           filter_empty=$(echo $filter_untaged | jq '. | select(.pull_requests | length != 0)')
           filter_type=$(echo $filter_empty | jq 'del(. | .pull_requests[] | select(.title | test("(feat|fix)") | not))')
-          echo $filter_type
+          echo $filter_type > ./gen.json
+      - name: save
+        uses: actions/upload-artifact@v2
+        with:
+          name: generated json
+          path: ./gen.json
