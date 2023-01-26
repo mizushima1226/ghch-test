@@ -1,0 +1,22 @@
+name: Generate Change Log
+
+on:
+  pull_request:
+    types: [opened]
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: base_ref
+        run: echo ${{ github.base_ref }}
+      - name: head_ref
+        run: echo ${{ github.head_ref }}
+      - name: base.ref
+        run: echo ${{ github.event.pull_request.base.ref }}
+      - name: head.ref
+        run: echo ${{ github.event.pull_request.head.ref }}
+      - name: GITHUB_BASE_REF
+        run: echo $GITHUB_BASE_REF
+      - name: GITHUB_HEAD_REF
+        run: echo $GITHUB_HEAD_REF
