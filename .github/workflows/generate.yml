@@ -54,8 +54,8 @@ jobs:
           cat changelog.json
       - name: Git commit
         run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
+          git config user.name mizushima1226
+          git config user.email mizuki.bz.3224@gmail.com
           git add .
           git commit -m "chore: generate changelog"
           git push origin main
