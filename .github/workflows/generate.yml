@@ -38,7 +38,7 @@ jobs:
           echo "git setup!!"
           
           tag_stg=stg.latest
-          git tag | grep $tag_stg &> /dev/null
+          git tag | grep $tag_stg 2>/dev/null
           
           echo "grep_result"
           echo $?
