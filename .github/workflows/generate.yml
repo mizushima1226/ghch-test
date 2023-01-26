@@ -7,6 +7,10 @@ on:
       - "stg"
   workflow_dispatch:
 
+env:
+  user_name: ${{ vars.GIT_USER_NAME }}
+  user_email: ${{ vars.GIT_USER_EMAIL }}
+
 jobs:
   generate:
     runs-on: ubuntu-latest
@@ -28,8 +32,8 @@ jobs:
         run: go install github.com/Songmu/ghch/cmd/ghch@latest
       - name: Git tag
         run: |
-          git config user.name mizushima1226
-          git config user.email mizuki.bz.3224@gmail.com
+          git config user.name $user_name
+          git config user.email $user_email
 
           tag_stg=stg.temp
           git tag | grep $tag_stg
@@ -68,8 +72,8 @@ jobs:
       # TODO: git user
       - name: Git commit
         run: |
-          git config user.name mizushima1226
-          git config user.email mizuki.bz.3224@gmail.com
+          git config user.name $user_name
+          git config user.email $user_email
           git add .
           git commit -m "chore: generate changelog"
           git push origin main
