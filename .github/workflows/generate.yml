@@ -44,8 +44,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: changelog
-          path: ./changelog.json
-      - name: Save Latest Changelog
-        with:
-          name: latest_changelog
-          path: ./latest_changelog.json
+          path: ./
