@@ -1,11 +1,22 @@
-generated=$(ghch --latest)
-# generated=$(ghch --from=20230101.12.24 --to=20230115.15.37)
-filtered=$(echo $generated | jq '. | { changed_at: .changed_at, from_revision: .from_revision, to_revision: .to_revision, pull_requests: .pull_requests | map({title: .title}) }')
-filter_untaged=$(echo $filtered | jq '. | select(.to_revision != "")')
-filter_empty=$(echo $filter_untaged | jq '. | select(.pull_requests | length != 0)')
-filter_type=$(echo $filter_empty | jq 'del(. | .pull_requests[] | select(.title | test("(feat|fix)") | not))')
-result=$(echo $filter_type | jq -s .)
-echo $result
-echo $result > latest_changelog.json
-jq -s '.[0] + .[1]' latest_changelog.json changelog.json > pre_generated.json
-mv pre_generated.json changelog.json
+tag_stg=stg.temp
+git tag | grep stg.temp
+
+# stg.tempタグが存在する場合、最新コミットにタグを付け替え
+if [ $? = 0 ]; then
+  commit_log=$(git show $tag_stg | grep commit) # commit afea0fcbd41559c0326998a5ff93b46a74d982f6
+  commit_hash=${commit_log#commit } # afea0fcbd41559c0326998a5ff93b46a74d982f6
+  tag_target=$(git tag -l --contains $commit_hash | grep -v $tag_stg) # 20230215.1
+
+  git tag -d $tag_target
+  git push origin --delete $tag_target
+
+  git tag -d $tag_stg
+  git push origin --delete $tag_stg
+fi
+
+git tag $tag_stg
+git push origin $tag_stg
+
+yyyymmddhhmm=$(date "+%Y%m%d.%H.%M")
+git tag $yyyymmddhhmm
+git push origin $yyyymmddhhmm
