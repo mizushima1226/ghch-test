@@ -34,15 +34,18 @@ jobs:
           filter_empty=$(echo $filter_untaged | jq '. | select(.pull_requests | length != 0)')
           filter_type=$(echo $filter_empty | jq 'del(. | .pull_requests[] | select(.title | test("(feat|fix)") | not))')
           result=$(echo $filter_type | jq -s .)
-          echo $result
           echo $result > latest_changelog.json
+          cat latest_changelog.json
           jq -s '.[0] + .[1]' latest_changelog.json changelog.json > pre_generated.json
           mv pre_generated.json changelog.json
           cat changelog.json
-          cat latest_changelog.json
           git diff
-      - name: Save generated file
+      - name: Save Cangelog
         uses: actions/upload-artifact@v2
         with:
           name: changelog
           path: ./changelog.json
+      - name: Save Latest Changelog
+        with:
+          name: latest_changelog
+          path: ./latest_changelog.json
