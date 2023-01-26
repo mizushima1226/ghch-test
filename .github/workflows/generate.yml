@@ -2,7 +2,7 @@ name: Generate Change Log
 
 on:
   pull_request:
-    types: [opened]
+    types: [opened, reopened]
     branches:
       - 'stg'
   workflow_dispatch:
