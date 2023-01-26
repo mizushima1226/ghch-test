@@ -25,6 +25,9 @@ jobs:
         run: go install github.com/Songmu/ghch/cmd/ghch@latest
       - name: Git tag
         run: |
+          git config user.name mizushima1226 
+          git config user.email mizuki.bz.3224@gmail.com
+          git add .
           tag_stg=stg.temp
           git tag | grep stg.temp
 
