@@ -35,7 +35,7 @@ jobs:
           git config user.name $user_name
           git config user.email $user_email
 
-          tag_stg=stg.temp
+          tag_stg=stg.latest
           git tag | grep $tag_stg
 
           # stg.tempタグが存在する場合、最新コミットにタグを付け替え
