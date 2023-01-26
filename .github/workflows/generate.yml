@@ -41,6 +41,8 @@ jobs:
           cat changelog.json
       - name: Git commit
         run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
           git log --oneline -n5
           git add .
           git commit -m "chore: generate changelog"
