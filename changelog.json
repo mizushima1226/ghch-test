@@ -1,0 +1,37 @@
+[
+  {
+    "changed_at": "2023-01-26T11:19:35+09:00",
+    "from_revision": "20230115.15.37",
+    "to_revision": "20230126.13.51",
+    "pull_requests": [
+      {
+        "title": "feat: 機能K"
+      },
+      {
+        "title": "feat: 機能I"
+      },
+      {
+        "title": "feat: 機能H"
+      },
+      {
+        "title": "feat: 機能G"
+      },
+      {
+        "title": "feat: 機能E"
+      }
+    ]
+  },
+  {
+    "changed_at": "2023-01-18T17:59:37+09:00",
+    "from_revision": "20230101.12.24",
+    "to_revision": "20230115.15.37",
+    "pull_requests": [
+      {
+        "title": "feat: 機能B"
+      },
+      {
+        "title": "feat: 機能A"
+      }
+    ]
+  }
+]

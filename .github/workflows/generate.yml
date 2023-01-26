@@ -1,22 +1,28 @@
 name: Generate Change Log
 
 on:
-  pull_request:
-    types: [opened]
+  # pull_request:
+  #   types: [opened]
+  workflow_dispatch:
 
 jobs:
   generate:
     runs-on: ubuntu-latest
     steps:
-      - name: base_ref
-        run: echo ${{ github.base_ref }}
-      - name: head_ref
-        run: echo ${{ github.head_ref }}
-      - name: base.ref
-        run: echo ${{ github.event.pull_request.base.ref }}
-      - name: head.ref
-        run: echo ${{ github.event.pull_request.head.ref }}
-      - name: GITHUB_BASE_REF
-        run: echo $GITHUB_BASE_REF
-      - name: GITHUB_HEAD_REF
-        run: echo $GITHUB_HEAD_REF
+      - name: Print Payload
+        run: cat $GITHUB_EVENT_PATH
+      - name: Current Directory
+        run: pwd; ls;
+      - name: Generate
+        run: |
+          generated=$(ghch --latest)
+          # generated=$(ghch --from=20230101.12.24 --to=20230115.15.37)
+          filtered=$(echo $generated | jq '. | { changed_at: .changed_at, from_revision: .from_revision, to_revision: .to_revision, pull_requests: .pull_requests | map({title: .title}) }')
+          filter_untaged=$(echo $filtered | jq '. | select(.to_revision != "")')
+          filter_empty=$(echo $filter_untaged | jq '. | select(.pull_requests | length != 0)')
+          filter_type=$(echo $filter_empty | jq 'del(. | .pull_requests[] | select(.title | test("(feat|fix)") | not))')
+          result=$(echo $filter_type | jq -s .)
+          echo $result
+          # echo $result > latest_changelog.json
+          # jq -s '.[0] + .[1]' latest_changelog.json changelog.json > pre_generated.json
+          # mv pre_generated.json changelog.json
