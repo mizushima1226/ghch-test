@@ -34,8 +34,8 @@ runs:
         filter_empty=$(echo $filter_untagged | jq '. | select(.pull_requests | length != 0)')
         filter_type=$(echo $filter_empty | jq 'del(. | .pull_requests[] | select(.title | test("(feat|fix)") | not))')
         result=$(echo $filter_type | jq -s .)
-        # echo "changelog=$(echo $result)" > $GITHUB_OUTPUT
-        echo "::set-output name=changelog::$(echo $result)"
+        echo "changelog=$(echo $result)" > $GITHUB_OUTPUT
+        #echo "::set-output name=changelog::$(echo $result)"
       env:
         GITHUB_TOKEN: ${{inputs.token}}
       shell: bash
