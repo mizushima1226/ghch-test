@@ -69,7 +69,7 @@ jobs:
           filter_untagged=$(echo $filtered | jq '. | select(.to_revision != "")')
           filter_empty=$(echo $filter_untagged | jq '. | select(.pull_requests | length != 0)')
           filter_type=$(echo $filter_empty | jq 'del(. | .pull_requests[] | select(.title | test("(feat|fix)") | not))')
-          marked_stg=$(echo $filter_type | jq '. |= .+ {"is_staging: true"}')
+          marked_stg=$(echo $filter_type | jq '. |= .+ {"is_staging": true}')
           result=$(echo $marked_stg | jq -s .)
 
           echo $result > latest_changelog.json
