@@ -21,8 +21,7 @@ runs:
     - name: Get Package
       run: go install github.com/Songmu/ghch/cmd/ghch@latest
       shell: bash
-    - name: Generate
-      id: generator
+    - id: generator
       run: |
         # Changelog生成のための一時ファイル(gitignore)
         mkdir -p generate
@@ -34,7 +33,8 @@ runs:
         filter_empty=$(echo $filter_untagged | jq '. | select(.pull_requests | length != 0)')
         filter_type=$(echo $filter_empty | jq 'del(. | .pull_requests[] | select(.title | test("(feat|fix)") | not))')
         result=$(echo $filter_type | jq -s .)
-        echo "changelog=$(echo $result)" > $GITHUB_OUTPUT
+        # echo "changelog=$(echo $result)" > $GITHUB_OUTPUT
+        echo "::set-output name=changelog::$(echo $result)"
       env:
         GITHUB_TOKEN: ${{inputs.token}}
       shell: bash
