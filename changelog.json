@@ -1,14 +1,13 @@
 [
   {
-    "changed_at": "2023-02-01T15:42:52+09:00",
+    "changed_at": "2023-02-01T15:44:09+09:00",
     "from_revision": "20230201.15.33",
-    "to_revision": "20230201.15.43",
+    "to_revision": "20230201.15.44",
     "pull_requests": [
       {
         "title": "feat: 機能X"
       }
-    ],
-    "is_staging": true
+    ]
   },
   {
     "changed_at": "2023-02-01T15:32:37+09:00",
