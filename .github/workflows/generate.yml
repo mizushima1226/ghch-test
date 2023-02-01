@@ -34,39 +34,40 @@ jobs:
         run: |
           git config user.name $user_name
           git config user.email $user_email
-          
+
           tag_stg=stg.latest
+
           set +e
           git tag | grep $tag_stg
-          
-          echo "grep_result"
-          echo $?
-
-          # stg.tempタグが存在する場合、最新コミットにタグを付け替え
+          # 既存のstg.latestタグを削除
           if [ $? = 0 ]; then
-            commit_log=$(git show $tag_stg | grep commit) # commit afea0fcbd41559c0326998a5ff93b46a74d982f6
-            commit_hash=${commit_log#commit } # afea0fcbd41559c0326998a5ff93b46a74d982f6
-            tag_target=$(git tag -l --contains $commit_hash | grep -v $tag_stg) # 20230215.1
+            commit_log=$(git show $tag_stg | grep commit)
+            commit_hash=${commit_log#commit }
+            tag_version=$(git tag -l --contains $commit_hash | grep -v $tag_stg)
 
-            git tag -d $tag_target
-            git push origin --delete $tag_target
+            # stg.latestタグをセットになっているバージョンタグ削除
+            git tag -d $tag_version
+            git push origin --delete $tag_version
 
+            # stg.latestタグ削除
             git tag -d $tag_stg
             git push origin --delete $tag_stg
           fi
           set -e
 
+          # 最新コミットにstg.latestタグを付与
           git tag $tag_stg
           git push origin $tag_stg
 
-          yyyymmddhhmm=$(date "+%Y%m%d.%H.%M")
-          git tag $yyyymmddhhmm
-          git push origin $yyyymmddhhmm
+          # 最新コミットにバージョンタグを付与
+          tag_version=$(date "+%Y%m%d.%H.%M")
+          git tag $tag_version
+          git push origin $tag_version
       - name: Generate
         run: |
           # Changelog生成のための一時ファイル(gitignore)
           mkdir generate
-          
+
           # 最新のchangelogを生成
           generated=$(ghch --latest)
           filtered=$(echo $generated | jq '. | { changed_at: .changed_at, from_revision: .from_revision, to_revision: .to_revision, pull_requests: .pull_requests | map({title: .title}) }')
@@ -76,7 +77,7 @@ jobs:
           marked_stg=$(echo $filter_type | jq '. |= .+ {"is_staging": true}')
           result=$(echo $marked_stg | jq -s .)
           echo $result > generate/latest_changelog.json
-          
+
           # 前回のchangelogがprdに未反映ならば削除する
           cat changelog.json | jq '.[] | select(.is_staging | not)' | jq -s . > generate/current.json
           jq -s '.[0] + .[1]' generate/latest_changelog.json generate/current.json > generate/pre_changelog.json
@@ -91,8 +92,3 @@ jobs:
           git add .
           git commit -m "chore: generate changelog"
           git push origin main
-      - name: Save Changelog
-        uses: actions/upload-artifact@v2
-        with:
-          name: changelog
-          path: ./
