@@ -58,6 +58,7 @@ jobs:
         uses: ./.github/actions/generate
         with:
           token: ${{secrets.TOKEN}}
+          branch: stg
       - name: Post Generate file
         run: |
           # Changelog生成のための一時ファイル(gitignore)
@@ -74,5 +75,5 @@ jobs:
           git config user.name $user_name
           git config user.email $user_email
           git add .
-          git commit -m "chore: generate changelog"
-          git push origin main
+          git commit -m "chore: generate changelog for staging"
+          git push origin stg
