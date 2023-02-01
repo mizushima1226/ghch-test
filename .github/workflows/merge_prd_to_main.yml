@@ -11,7 +11,7 @@ env:
   user_email: ${{ vars.GIT_USER_EMAIL }}
 
 jobs:
-  generate:
+  merge:
     runs-on: ubuntu-latest
     steps:
       - name: Print Payload
