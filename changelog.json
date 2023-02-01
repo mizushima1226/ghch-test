@@ -1,9 +1,12 @@
 [
   {
-    "changed_at": "2023-02-01T19:13:00+09:00",
+    "changed_at": "2023-02-01T19:16:02+09:00",
     "from_revision": "20230201.16.04",
-    "to_revision": "20230201.19.13",
+    "to_revision": "20230201.19.16",
     "pull_requests": [
+      {
+        "title": "fix: バグ修正BB"
+      },
       {
         "title": "feat: 機能AA"
       }
