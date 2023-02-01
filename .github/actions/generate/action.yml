@@ -6,7 +6,7 @@ inputs:
 outputs:
   generate:
     description: "Generated ChangeLog"
-    value: ${{ steps.generate.outputs.changelog }}
+    value: ${{ steps.generator.outputs.changelog }}
 runs:
   using: "composite"
   steps:
@@ -22,7 +22,7 @@ runs:
       run: go install github.com/Songmu/ghch/cmd/ghch@latest
       shell: bash
     - name: Generate
-      id: generate
+      id: generator
       run: |
         # Changelog生成のための一時ファイル(gitignore)
         mkdir -p generate
