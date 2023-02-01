@@ -1,14 +1,24 @@
 [
   {
-    "changed_at": "2023-02-01T15:20:45+09:00",
-    "from_revision": "20230201.14.51",
-    "to_revision": "20230201.15.25",
+    "changed_at": "2023-02-01T15:32:37+09:00",
+    "from_revision": "20230201.15.25",
+    "to_revision": "20230201.15.33",
     "pull_requests": [
       {
-        "title": "feat: 機能U"
+        "title": "feat: 機能W"
       },
       {
-        "title": "feat: 機能T"
+        "title": "feat: 機能V"
+      }
+    ]
+  },
+  {
+    "changed_at": "2023-02-01T15:26:50+09:00",
+    "from_revision": "20230201.15.25",
+    "to_revision": "20230201.15.27",
+    "pull_requests": [
+      {
+        "title": "feat: 機能V"
       }
     ]
   },
