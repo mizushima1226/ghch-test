@@ -24,7 +24,10 @@ runs:
     - name: Generate
       id: generate
       run: |
+        echo git log
         git log --oneline
+        echo git tag
+        git tag
         # Changelog生成のための一時ファイル(gitignore)
         mkdir -p generate
 
