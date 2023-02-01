@@ -23,9 +23,6 @@ runs:
       shell: bash
     - id: generator
       run: |
-        # Changelog生成のための一時ファイル(gitignore)
-        mkdir -p generate
-
         # 最新のchangelogを生成
         generated=$(ghch --latest)
         filtered=$(echo $generated | jq '. | { changed_at: .changed_at, from_revision: .from_revision, to_revision: .to_revision, pull_requests: .pull_requests | map({title: .title}) }')
@@ -34,7 +31,6 @@ runs:
         filter_type=$(echo $filter_empty | jq 'del(. | .pull_requests[] | select(.title | test("(feat|fix)") | not))')
         result=$(echo $filter_type | jq -s .)
         echo "changelog=$(echo $result)" > $GITHUB_OUTPUT
-        #echo "::set-output name=changelog::$(echo $result)"
       env:
         GITHUB_TOKEN: ${{inputs.token}}
       shell: bash
