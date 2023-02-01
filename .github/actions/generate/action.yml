@@ -16,7 +16,7 @@ runs:
       run: |
         # main, stgブランチ以外の入力は拒否
         if [ ${{inputs.branch}} != "main" ] && [ ${{inputs.branch}} != "stg" ]; then
-          echo "ブランチの指定は[main, stg]のみ許可されています" 1>&2
+          echo "ブランチの指定は[main, stg]のみ許可されています"
           exit 1
         fi
       shell: bash
