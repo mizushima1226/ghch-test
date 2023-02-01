@@ -57,8 +57,7 @@ jobs:
           tag_version=$(date "+%Y%m%d.%H.%M")
           git tag $tag_version
           git push origin $tag_version
-      - name: Generate
-        id: generate
+      - id: generate
         uses: ./.github/actions/generate
         with:
           token: ${{secrets.TOKEN}}
