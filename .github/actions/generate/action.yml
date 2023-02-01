@@ -1,5 +1,8 @@
 name: Generate ChangeLog
 inputs:
+  # ghch経由でのGitHubAPIの呼び出し回数の制限を回避するためにsecrets.GITHUB_TOKENではなく
+  # 個人アカウントから払い出したTOKENを使用している
+  # try&errorを繰り返すためなので、実際に運用する際はsecrets.GITHUB_TOKENで十分だと思う
   token:
     description: GITHUB_TOKEN
     required: true
