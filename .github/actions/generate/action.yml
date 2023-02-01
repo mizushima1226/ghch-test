@@ -33,8 +33,7 @@ runs:
 
         # 最新のchangelogを生成
         generated=$(ghch --latest)
-        echo generated
-        cat generated
+        echo generated is ... $generated
         filtered=$(echo $generated | jq '. | { changed_at: .changed_at, from_revision: .from_revision, to_revision: .to_revision, pull_requests: .pull_requests | map({title: .title}) }')
         filter_untagged=$(echo $filtered | jq '. | select(.to_revision != "")')
         filter_empty=$(echo $filter_untagged | jq '. | select(.pull_requests | length != 0)')
