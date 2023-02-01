@@ -1,5 +1,16 @@
 [
   {
+    "changed_at": "2023-02-01T16:02:31+09:00",
+    "from_revision": "20230201.15.51",
+    "to_revision": "20230201.16.03",
+    "pull_requests": [
+      {
+        "title": "feat: 機能Z"
+      }
+    ],
+    "is_staging": true
+  },
+  {
     "changed_at": "2023-02-01T15:50:43+09:00",
     "from_revision": "20230201.15.44",
     "to_revision": "20230201.15.51",
