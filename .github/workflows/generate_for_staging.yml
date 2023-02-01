@@ -1,0 +1,86 @@
+name: Generate Change Log for staging
+
+on:
+  pull_request:
+    types: [opened, reopened]
+    branches:
+      - "stg"
+  workflow_dispatch:
+
+env:
+  user_name: ${{ vars.GIT_USER_NAME }}
+  user_email: ${{ vars.GIT_USER_EMAIL }}
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: szenius/set-timezone@v1.0
+        with:
+          timezoneLinux: "Asia/Tokyo"
+      - name: Print Payload
+        run: cat $GITHUB_EVENT_PATH
+      - uses: actions/checkout@v3
+        with:
+          ref: main
+          fetch-depth: 0
+      - name: Git tag
+        run: |
+          git config user.name $user_name
+          git config user.email $user_email
+
+          tag_stg=stg.latest
+
+          set +e
+          git tag | grep $tag_stg
+          # 既存のstg.latestタグを削除
+          if [ $? = 0 ]; then
+            commit_log=$(git show $tag_stg | grep commit)
+            commit_hash=${commit_log#commit }
+            tag_version=$(git tag -l --contains $commit_hash | grep -v $tag_stg)
+
+            # stg.latestタグをセットになっているバージョンタグ削除
+            git tag -d $tag_version
+            git push origin --delete $tag_version
+
+            # stg.latestタグ削除
+            git tag -d $tag_stg
+            git push origin --delete $tag_stg
+          fi
+          set -e
+
+          # 最新コミットにstg.latestタグを付与
+          git tag $tag_stg
+          git push origin $tag_stg
+
+          # 最新コミットにバージョンタグを付与
+          tag_version=$(date "+%Y%m%d.%H.%M")
+          git tag $tag_version
+          git push origin $tag_version
+      - name: Generate
+        id: generate
+        uses: ./.github/actions/generate
+        with:
+          token: ${{secrets.TOKEN}}
+      - name: Post Generate file
+        run: |
+          # Changelog生成のための一時ファイル(gitignore)
+          mkdir -p generate
+
+          # 最新のchangelogにstgの目印を付与する
+          echo ${{ steps.generate.outputs.changelog }}
+          echo ${{ steps.generate.outputs.changelog }} | jq '.[0] |= .+ {"is_staging": true}' > generate/latest_changelog.json
+          cat generate/latest_changelog.json
+
+          # 最新のchangelogがstg向けならば除去
+          cat changelog.json | jq '.[] | select(.is_staging | not)' | jq -s . > generate/current.json
+          jq -s '.[0] + .[1]' generate/latest_changelog.json generate/current.json > generate/pre_changelog.json
+          mv generate/pre_changelog.json changelog.json
+      # TODO: git user
+      - name: Git commit
+        run: |
+          git config user.name $user_name
+          git config user.email $user_email
+          git add .
+          git commit -m "chore: generate changelog"
+          git push origin main
