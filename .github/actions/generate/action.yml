@@ -3,8 +3,12 @@ inputs:
   token:
     description: GITHUB_TOKEN
     required: true
+outputs:
+  generate:
+    description: "Generated ChangeLog"
+    value: ${{ steps.generate.outputs.changelog }}
 runs:
-  using: "Composite"
+  using: "composite"
   steps:
     - name: Set up Go
       uses: actions/setup-go@v3
@@ -14,6 +18,7 @@ runs:
       run: go install github.com/Songmu/ghch/cmd/ghch@latest
       shell: bash
     - name: Generate
+      id: generate
       run: |
         # Changelog生成のための一時ファイル(gitignore)
         mkdir -p generate
@@ -25,11 +30,7 @@ runs:
         filter_empty=$(echo $filter_untagged | jq '. | select(.pull_requests | length != 0)')
         filter_type=$(echo $filter_empty | jq 'del(. | .pull_requests[] | select(.title | test("(feat|fix)") | not))')
         result=$(echo $filter_type | jq -s .)
-        echo $result > generate/latest_changelog.json
-        cat generate/latest_changelog.json
-
-        # 最新のchangelogがstg向けならば除去
-        cat changelog.json | jq '.[] | select(.is_staging | not)' | jq -s . > generate/current.json
+        echo "changelog=$(echo $result)" > $GITHUB_OUTPUT
       env:
         GITHUB_TOKEN: ${{inputs.token}}
       shell: bash
