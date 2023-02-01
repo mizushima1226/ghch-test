@@ -32,7 +32,7 @@ runs:
         result=$(echo $filter_type | jq -s .)
         echo $result
         echo "changelog=$(echo $result)"
-        echo "changelog=$(echo $result)" > $GITHUB_OUTPUT
+        echo "changelog='$(echo $result)'" > $GITHUB_OUTPUT
       env:
         GITHUB_TOKEN: ${{inputs.token}}
       shell: bash
