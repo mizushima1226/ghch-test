@@ -1,8 +1,5 @@
 [
   {
-    "is_staging": true
-  },
-  {
     "changed_at": "2023-01-26T18:37:45+09:00",
     "from_revision": "20230126.13.51",
     "to_revision": "20230126.18.38",
