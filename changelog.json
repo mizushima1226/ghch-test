@@ -1,8 +1,8 @@
 [
   {
-    "changed_at": "2023-02-01T14:37:36+09:00",
+    "changed_at": "2023-02-01T14:42:28+09:00",
     "from_revision": "20230201.11.59",
-    "to_revision": "20230201.14.38",
+    "to_revision": "20230201.14.43",
     "pull_requests": [
       {
         "title": "feat: 機能S"
