@@ -1,0 +1,40 @@
+name: Generate ChangeLog
+inputs:
+  token:
+    description: GITHUB_TOKEN
+    required: true
+outputs:
+  changelog:
+    description: "Generated ChangeLog"
+    value: ${{ steps.generator.outputs.changelog }}
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v3
+      with:
+        ref: main
+        fetch-depth: 0
+    - name: Set up Go
+      uses: actions/setup-go@v3
+      with:
+        go-version: 1.18
+    - name: Get Package
+      run: go install github.com/Songmu/ghch/cmd/ghch@latest
+      shell: bash
+    - id: generator
+      run: |
+        # 最新のchangelogを生成
+        generated=$(ghch --latest)
+        filtered=$(echo $generated | jq '. | { changed_at: .changed_at, from_revision: .from_revision, to_revision: .to_revision, pull_requests: .pull_requests | map({title: .title}) }')
+        filter_untagged=$(echo $filtered | jq '. | select(.to_revision != "")')
+        filter_empty=$(echo $filter_untagged | jq '. | select(.pull_requests | length != 0)')
+        filter_type=$(echo $filter_empty | jq 'del(. | .pull_requests[] | select(.title | test("(feat|fix)") | not))')
+        result=$(echo $filter_type | jq -s .)
+        echo $result
+        echo "changelog=$(echo $result)"
+        echo "changelog='$(echo $result)'" > $GITHUB_OUTPUT
+      env:
+        GITHUB_TOKEN: ${{inputs.token}}
+      shell: bash
+    - run: echo "${{ github.action_path }}" >> $GITHUB_PATH
+      shell: bash
