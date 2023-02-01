@@ -64,9 +64,9 @@ jobs:
           token: ${{secrets.TOKEN}}
       - name: Post Generate file
         run: |
-          rm -rf generate
-          mkdir generate
-          
+          # 生成のための一時的ディレクトリ
+          mkdir -p generate
+
           # 最新のchangelogにstgの目印を付与する
           echo ${{ steps.generate.outputs.changelog }} | jq '.[0] |= .+ {"is_staging": true}' > generate/latest_changelog.json
           cat generate/latest_changelog.json
