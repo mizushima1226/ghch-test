@@ -1,4 +1,4 @@
-name: Generate Change Log
+name: Generate Change Log for staging
 
 on:
   pull_request:
