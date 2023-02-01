@@ -24,6 +24,7 @@ runs:
     - name: Generate
       id: generate
       run: |
+        git log --oneline
         # Changelog生成のための一時ファイル(gitignore)
         mkdir -p generate
 
@@ -35,6 +36,8 @@ runs:
         filter_type=$(echo $filter_empty | jq 'del(. | .pull_requests[] | select(.title | test("(feat|fix)") | not))')
         result=$(echo $filter_type | jq -s .)
         echo "changelog=$(echo $result)" > $GITHUB_OUTPUT
+        
+        echo changelog is ... $result
       env:
         GITHUB_TOKEN: ${{inputs.token}}
       shell: bash
