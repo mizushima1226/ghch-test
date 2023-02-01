@@ -2,7 +2,7 @@ name: Generate Change Log for staging
 
 on:
   pull_request:
-    types: [opened, reopened]
+    types: [opened]
     branches:
       - "stg"
   workflow_dispatch:
@@ -66,18 +66,16 @@ jobs:
       - name: Post Generate file
         run: |
           # Changelog生成のための一時ファイル(gitignore)
-          mkdir -p generate
+          mkdir generate
 
           # 最新のchangelogにstgの目印を付与する
-          echo ${{ steps.generate.outputs.changelog }}
-          echo ${{ steps.generate.outputs.changelog }} | jq '.[0] |= .+ {"is_staging": true}' > generate/latest_changelog.json
-          cat generate/latest_changelog.json
+          marked_stg=$(echo ${{ steps.generate.outputs.changelog }} | jq '.[0] |= .+ {"is_staging": true}')
+          echo $marked_stg > generate/latest_changelog.json
 
-          # 最新のchangelogがstg向けならば除去
+          # 過去のstgの目印は除去
           cat changelog.json | jq '.[] | select(.is_staging | not)' | jq -s . > generate/current.json
           jq -s '.[0] + .[1]' generate/latest_changelog.json generate/current.json > generate/pre_changelog.json
           mv generate/pre_changelog.json changelog.json
-      # TODO: git user
       - name: Git commit
         run: |
           git config user.name $user_name
