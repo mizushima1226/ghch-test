@@ -58,6 +58,7 @@ jobs:
         uses: ./.github/actions/generate
         with:
           token: ${{secrets.TOKEN}}
+          branch: stg
       - name: Post Generate file
         run: |
           # Changelog生成のための一時ファイル(gitignore)

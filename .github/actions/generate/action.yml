@@ -3,6 +3,8 @@ inputs:
   token:
     description: GITHUB_TOKEN
     required: true
+  branch:
+    required: true
 outputs:
   changelog:
     description: "Generated ChangeLog"
@@ -10,9 +12,16 @@ outputs:
 runs:
   using: "composite"
   steps:
+    - name: Validation
+      run: |
+        # main, stgブランチ以外の入力は拒否
+        if [ $branch != "main" ] && [ $branch != "stg" ]; then
+          exit 1
+        fi
+      shell: bash
     - uses: actions/checkout@v3
       with:
-        ref: main
+        ref: ${{inputs.branch}}
         fetch-depth: 0
     - name: Set up Go
       uses: actions/setup-go@v3
