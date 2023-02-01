@@ -65,7 +65,9 @@ jobs:
         run: |
           # 最新のchangelogにstgの目印を付与する
           cat generate/latest_changelog.json | jq '.[0] |= .+ {"is_staging": true}' > generate/temp.json
+          cat generate/temp.json
           mv generate/temp.json generate/latest_changelog.json
+          cat generate/latest_changelog.json
 
           jq -s '.[0] + .[1]' generate/latest_changelog.json generate/current.json > generate/pre_changelog.json
           mv generate/pre_changelog.json changelog.json

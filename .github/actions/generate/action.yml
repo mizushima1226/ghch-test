@@ -26,6 +26,7 @@ runs:
         filter_type=$(echo $filter_empty | jq 'del(. | .pull_requests[] | select(.title | test("(feat|fix)") | not))')
         result=$(echo $filter_type | jq -s .)
         echo $result > generate/latest_changelog.json
+        cat generate/latest_changelog.json
 
         # 最新のchangelogがstg向けならば除去
         cat changelog.json | jq '.[] | select(.is_staging | not)' | jq -s . > generate/current.json
