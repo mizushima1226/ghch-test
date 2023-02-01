@@ -1,1 +1,1 @@
-[ { "changed_at": "2023-02-01T11:37:26+09:00", "from_revision": "20230126.18.38", "to_revision": "20230201.11.38", "pull_requests": [ { "title": "feat: 機能R" }, { "title": "feat: 機能Q" } ], "is_staging: true": null } ]
+[ { "changed_at": "2023-02-01T11:39:35+09:00", "from_revision": "20230126.18.38", "to_revision": "20230201.11.40", "pull_requests": [ { "title": "feat: 機能R" }, { "title": "feat: 機能Q" } ], "is_staging": true } ]
