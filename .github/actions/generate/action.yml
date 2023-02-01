@@ -4,10 +4,9 @@ inputs:
     description: GITHUB_TOKEN
     required: true
 outputs:
-  generate:
+  changelog:
     description: "Generated ChangeLog"
-    # value: ${{ steps.generator.outputs.changelog }}
-    value: test
+    value: ${{ steps.generator.outputs.changelog }}
 runs:
   using: "composite"
   steps:
