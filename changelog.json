@@ -1,8 +1,8 @@
 [
   {
-    "changed_at": "2023-02-01T12:16:17+09:00",
+    "changed_at": "2023-02-01T12:20:03+09:00",
     "from_revision": "20230201.11.59",
-    "to_revision": "20230201.12.16",
+    "to_revision": "20230201.12.20",
     "pull_requests": [
       {
         "title": "feat: 機能R"
