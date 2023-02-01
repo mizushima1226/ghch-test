@@ -15,7 +15,7 @@ runs:
     - name: Validation
       run: |
         # main, stgブランチ以外の入力は拒否
-        if [ $branch != "main" ] && [ $branch != "stg" ]; then
+        if [ ${{inputs.branch}} != "main" ] && [ ${{inputs.branch}} != "stg" ]; then
           exit 1
         fi
       shell: bash
