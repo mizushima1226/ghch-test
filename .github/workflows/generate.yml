@@ -78,6 +78,8 @@ jobs:
           cat changelog.json | jq '.[] | select(.is_staging | not)' > temp.json
           jq -s '.[0] + .[1]' latest_changelog.json temp.json > pre_generated.json
           mv pre_generated.json changelog.json
+        env:
+          GITHUB_TOKEN: ${{secrets.TOKEN}}
       # TODO: git user
       - name: Git commit
         run: |
