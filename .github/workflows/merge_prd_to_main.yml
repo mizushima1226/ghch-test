@@ -20,13 +20,11 @@ jobs:
         with:
           ref: prd
           fetch-depth: 0
-      - uses: actions/checkout@v3
-        with:
-          ref: main
-          fetch-depth: 0
       - name: Git commit
         run: |
           set +e
+          git fetch
+          git switch main
           git diff main..prd -- changelog.json –exit-code
           if [ $? -ne 0 ]; then
             git merge prd
