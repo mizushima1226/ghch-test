@@ -29,18 +29,14 @@ runs:
 
         # 最新のchangelogを生成
         generated=$(ghch --latest)
-        filtered=$(echo $generated | jq '. | { changed_at: .changed_at, from_revision: .from_revision, to_revision: .to_revision, pull_requests: .pull_requests | map({title: .title}) }')
         echo filtered is $filtered
-        filter_untagged=$(echo $filtered | jq '. | select(.to_revision != "")')
         echo filter_untagged is $filter_untagged
-        filter_empty=$(echo $filter_untagged | jq '. | select(.pull_requests | length != 0)')
         echo filter_empty is $filter_empty
-        filter_type=$(echo $filter_empty | jq 'del(. | .pull_requests[] | select(.title | test("(feat|fix)") | not))')
         echo filter_type is $filter_type
         result=$(echo $filter_type | jq -s .)
-        echo "changelog=$(echo $result)" > $GITHUB_OUTPUT
+        echo "changelog=$(echo $result)" >> $GITHUB_OUTPUT
         
-        echo changelog is $result
+        echo output $GITHUB_OUTPUT
       env:
         GITHUB_TOKEN: ${{inputs.token}}
       shell: bash
