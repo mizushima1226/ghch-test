@@ -63,7 +63,7 @@ jobs:
           # Changelog生成のための一時ファイル(gitignore)
           mkdir -p generate
 
-          echo ${{ steps.generate.outputs.changelog }} | jq '.[0] |= .+ {"is_staging": true}' > generate/latest_changelog.json
+          echo ${{ steps.generate.outputs.changelog }} > generate/latest_changelog.json
 
           cat changelog.json | jq '.[] | select(.is_staging | not)' | jq -s . > generate/current.json
           jq -s '.[0] + .[1]' generate/latest_changelog.json generate/current.json > generate/pre_changelog.json
