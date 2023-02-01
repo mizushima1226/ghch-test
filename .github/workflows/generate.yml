@@ -64,6 +64,9 @@ jobs:
           git push origin $yyyymmddhhmm
       - name: Generate
         run: |
+          # Changelog生成のための一時ファイル(gitignore)
+          mkdir generate
+          
           # 最新のchangelogを生成
           generated=$(ghch --latest)
           filtered=$(echo $generated | jq '. | { changed_at: .changed_at, from_revision: .from_revision, to_revision: .to_revision, pull_requests: .pull_requests | map({title: .title}) }')
