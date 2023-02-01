@@ -58,7 +58,7 @@ jobs:
           git tag $tag_version
           git push origin $tag_version
       - name: Generate
-        uses: ./.github/actions/build
+        uses: ./.github/actions/generate
       - name: Post Generate file
         run: |
           # 最新のchangelogにstgの目印を付与する
