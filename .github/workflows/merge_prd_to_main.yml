@@ -1,4 +1,4 @@
-name: Generate Change Log for production
+name: Merge prd to main
 
 on:
   push:
@@ -20,12 +20,15 @@ jobs:
         with:
           ref: prd
           fetch-depth: 0
+      - uses: actions/checkout@v3
+        with:
+          ref: main
+          fetch-depth: 0
       - name: Git commit
         run: |
           set +e
           git diff main..prd -- changelog.json –exit-code
           if [ $? -ne 0 ]; then
-            git switch main
             git merge prd
             git push origin main
           fi
