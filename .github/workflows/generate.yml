@@ -75,7 +75,7 @@ jobs:
           echo $result > latest_changelog.json
           
           # 前回のchangelogがprdに未反映ならば削除する
-          cat changelog.json | jq '.[] | select(.is_staging | not)' > temp.json
+          cat changelog.json | jq '.[] | select(.is_staging | not)' | jq -s . > temp.json
           jq -s '.[0] + .[1]' latest_changelog.json temp.json > pre_generated.json
           mv pre_generated.json changelog.json
         env:
