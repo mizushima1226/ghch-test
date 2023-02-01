@@ -59,6 +59,8 @@ jobs:
           git push origin $tag_version
       - name: Generate
         uses: ./.github/actions/generate
+        with:
+          token: ${{secrets.TOKEN}}
       - name: Post Generate file
         run: |
           # 最新のchangelogにstgの目印を付与する
@@ -67,8 +69,6 @@ jobs:
 
           jq -s '.[0] + .[1]' generate/latest_changelog.json generate/current.json > generate/pre_changelog.json
           mv generate/pre_changelog.json changelog.json
-        env:
-          GITHUB_TOKEN: ${{secrets.TOKEN}}
       # TODO: git user
       - name: Git commit
         run: |

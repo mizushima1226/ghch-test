@@ -1,3 +1,8 @@
+name: Generate ChangeLog
+inputs:
+  token:
+    description: GITHUB_TOKEN
+    required: true
 runs:
   using: "Composite"
   steps:
@@ -25,5 +30,5 @@ runs:
         # 最新のchangelogがstg向けならば除去
         cat changelog.json | jq '.[] | select(.is_staging | not)' | jq -s . > generate/current.json
       env:
-        GITHUB_TOKEN: ${{secrets.TOKEN}}
+        GITHUB_TOKEN: ${{inputs.token}}
       shell: bash
