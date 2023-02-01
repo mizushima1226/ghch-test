@@ -74,5 +74,5 @@ jobs:
           git config user.name $user_name
           git config user.email $user_email
           git add .
-          git commit -m "chore: generate changelog"
+          git commit -m "chore: generate changelog for staging"
           git push origin stg
