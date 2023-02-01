@@ -16,7 +16,7 @@ runs:
     - name: Generate
       run: |
         # Changelog生成のための一時ファイル(gitignore)
-        mkdir generate
+        mkdir -p generate
 
         # 最新のchangelogを生成
         generated=$(ghch --latest)
