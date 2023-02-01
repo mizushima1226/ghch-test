@@ -1,0 +1,29 @@
+runs:
+  using: "Composite"
+  steps:
+    - name: Set up Go
+      uses: actions/setup-go@v3
+      with:
+        go-version: 1.18
+    - name: Get Package
+      run: go install github.com/Songmu/ghch/cmd/ghch@latest
+      shell: bash
+    - name: Generate
+      run: |
+        # Changelog生成のための一時ファイル(gitignore)
+        mkdir generate
+
+        # 最新のchangelogを生成
+        generated=$(ghch --latest)
+        filtered=$(echo $generated | jq '. | { changed_at: .changed_at, from_revision: .from_revision, to_revision: .to_revision, pull_requests: .pull_requests | map({title: .title}) }')
+        filter_untagged=$(echo $filtered | jq '. | select(.to_revision != "")')
+        filter_empty=$(echo $filter_untagged | jq '. | select(.pull_requests | length != 0)')
+        filter_type=$(echo $filter_empty | jq 'del(. | .pull_requests[] | select(.title | test("(feat|fix)") | not))')
+        result=$(echo $filter_type | jq -s .)
+        echo $result > generate/latest_changelog.json
+
+        # 最新のchangelogがstg向けならば除去
+        cat changelog.json | jq '.[] | select(.is_staging | not)' | jq -s . > generate/current.json
+      env:
+        GITHUB_TOKEN: ${{secrets.TOKEN}}
+      shell: bash
