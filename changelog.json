@@ -1,8 +1,8 @@
 [
   {
-    "changed_at": "2023-02-01T15:04:15+09:00",
+    "changed_at": "2023-02-01T15:20:45+09:00",
     "from_revision": "20230201.14.51",
-    "to_revision": "20230201.15.06",
+    "to_revision": "20230201.15.25",
     "pull_requests": [
       {
         "title": "feat: 機能U"
@@ -10,8 +10,7 @@
       {
         "title": "feat: 機能T"
       }
-    ],
-    "is_staging": true
+    ]
   },
   {
     "changed_at": "2023-02-01T14:50:55+09:00",
