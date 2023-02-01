@@ -22,6 +22,9 @@ jobs:
           fetch-depth: 0
       - name: Git commit
         run: |
+          git config user.name $user_name
+          git config user.email $user_email
+
           set +e
           git fetch
           git switch main
