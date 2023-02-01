@@ -37,7 +37,7 @@ jobs:
           
           tag_stg=stg.latest
           set +e
-          git tag | grep $tag_stg 2>/dev/null
+          git tag | grep $tag_stg
           
           echo "grep_result"
           echo $?
