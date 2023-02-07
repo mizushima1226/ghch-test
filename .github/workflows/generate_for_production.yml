@@ -2,7 +2,7 @@ name: Generate Change Log for production
 
 on:
   pull_request:
-    types: [opened, reopened]
+    types: [opened]
     branches:
       - "prd"
   workflow_dispatch:
@@ -62,18 +62,18 @@ jobs:
       - name: Post Generate file
         run: |
           # Changelog生成のための一時ファイル(gitignore)
-          mkdir -p generate
+          mkdir generate
 
           echo ${{ steps.generate.outputs.changelog }} > generate/latest_changelog.json
 
+          # stgの目印は除去
           cat changelog.json | jq '.[] | select(.is_staging | not)' | jq -s . > generate/current.json
           jq -s '.[0] + .[1]' generate/latest_changelog.json generate/current.json > generate/pre_changelog.json
           mv generate/pre_changelog.json changelog.json
-      # TODO: git user
       - name: Git commit
         run: |
           git config user.name $user_name
           git config user.email $user_email
           git add .
-          git commit -m "chore: generate changelog for staging"
+          git commit -m "chore: generate changelog for production"
           git push origin stg
