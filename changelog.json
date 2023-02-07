@@ -1,19 +1,5 @@
 [
   {
-    "changed_at": "2023-02-01T19:50:52+09:00",
-    "from_revision": "20230201.16.04",
-    "to_revision": "20230207.15.49",
-    "pull_requests": [
-      {
-        "title": "fix: バグ修正BB(xxx)"
-      },
-      {
-        "title": "feat: 機能AA"
-      }
-    ],
-    "is_staging": true
-  },
-  {
     "changed_at": "2023-02-01T16:03:45+09:00",
     "from_revision": "20230201.15.51",
     "to_revision": "20230201.16.04",
