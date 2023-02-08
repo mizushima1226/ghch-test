@@ -1,5 +1,18 @@
 [
   {
+    "changed_at": "2023-02-08T17:40:32+09:00",
+    "from_revision": "20230208.17.33",
+    "to_revision": "20230208.17.41",
+    "pull_requests": [
+      {
+        "title": "feat: 機能LL"
+      },
+      {
+        "title": "feat: 機能KK"
+      }
+    ]
+  },
+  {
     "changed_at": "2023-02-08T17:32:26+09:00",
     "from_revision": "20230208.13.13",
     "to_revision": "20230208.17.33",
