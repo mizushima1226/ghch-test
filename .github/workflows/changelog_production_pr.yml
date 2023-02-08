@@ -29,10 +29,10 @@ jobs:
       - name: Git tag
         run: |
           # 古いgit tagを削除
-          scripts/changelog/delete-old-tag.sh
+          script/changelog/delete-old-tag.sh
 
           # 最新コミットにバージョンタグを付与
-          scripts/changelog/git-tag-latest-version.sh
+          script/changelog/git-tag-latest-version.sh
       - name: Generate
         id: generate
         uses: ./.github/actions/generate
