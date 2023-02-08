@@ -38,7 +38,11 @@ jobs:
           token: ${{secrets.GITHUB_TOKEN}}
           branch: stg
       - name: Post Generate file
-        run: scripts/changelog/post-generate-file.sh $(echo ${{ steps.generate.outputs.changelog }})
+        run: |
+          # Changelog生成のための一時ファイル(gitignore)
+          mkdir generate
+          echo ${{ steps.generate.outputs.changelog }} > generate/latest_changelog.json
+          scripts/changelog/post-generate-file.sh
       - name: Git commit
         run: |
           git config user.name $user_name

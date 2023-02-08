@@ -46,7 +46,12 @@ jobs:
           # 最新のchangelogにstgの目印を付与する
           marked_stg=$(echo ${{ steps.generate.outputs.changelog }} | jq '.[0] |= .+ {"is_staging": true}')
           echo $marked_stg
-          scripts/changelog/post-generate-file.sh $(echo $marked_stg)
+
+          # Changelog生成のための一時ファイル(gitignore)
+          mkdir generate
+          echo $marked_stg > generate/latest_changelog.json
+
+          scripts/changelog/post-generate-file.sh
       - name: Git commit
         run: |
           git config user.name $user_name
