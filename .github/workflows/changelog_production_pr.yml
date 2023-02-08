@@ -29,10 +29,10 @@ jobs:
       - name: Git tag
         run: |
           # 古いgit tagを削除
-          scripts/changelog/delete-old-tag.sh
+          script/changelog/delete-old-tag.sh
 
           # 最新コミットにバージョンタグを付与
-          scripts/changelog/git-tag-latest-version.sh
+          script/changelog/git-tag-latest-version.sh
       - name: Generate
         id: generate
         uses: ./.github/actions/generate
@@ -42,7 +42,7 @@ jobs:
       - name: Post Generate file
         run: |
           # Changelog生成のための一時ファイル(gitignore)
-          mkdir generate
+          mkdir -p temp/generate
 
           # 本当は後続のshに引数でJSON文字列を渡したいがうまくいかなかったので一時ファイルに保存
           echo ${{ steps.generate.outputs.changelog }} > temp/generate/latest_changelog.json
