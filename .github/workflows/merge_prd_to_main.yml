@@ -49,5 +49,5 @@ jobs:
           SLACK_CHANNEL: 通知テスト
           SLACK_TITLE: "[Ogawa Finder] mainブランチへのmergeに失敗しました"
           SLACK_MESSAGE: コンフリクトしている場合、手動操作にて、コンフリクト解消・mainブランチへのpushを実施してください
-          SLACK_COLOR: "#FFE521"
+          SLACK_COLOR: "#EDB22F"
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
