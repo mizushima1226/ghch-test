@@ -1,10 +1,12 @@
+# NOTE: ChangeLog自動生成に関する詳細情報をまとめています↓
+# @see https://docs.google.com/document/d/1vRLu7KIPOgotDpa7aiEILq3buKmfvBnU1HpAQaam8cY/edit#
 name: Generate Change Log for staging
 
 on:
   pull_request:
     types: [opened]
     branches:
-      - "stg"
+      - "staging"
   workflow_dispatch:
 
 env:
@@ -27,10 +29,10 @@ jobs:
       - name: Git tag
         run: |
           # 古いgit tagを削除
-          scripts/changelog/delete-old-tag.sh
+          script/changelog/delete-old-tag.sh
 
           # 最新コミットにバージョンタグを付与
-          scripts/changelog/git-tag-latest-version.sh
+          script/changelog/git-tag-latest-version.sh
 
           # 最新コミットにstg.latestタグを付与
           git tag stg.latest
@@ -49,9 +51,11 @@ jobs:
 
           # Changelog生成のための一時ファイル(gitignore)
           mkdir generate
-          echo $marked_stg > generate/latest_changelog.json
 
-          scripts/changelog/post-generate-file.sh
+          # 本当は後続のshに引数でJSON文字列を渡したいがうまくいかなかったので一時ファイルに保存
+          echo $marked_stg > temp/generate/latest_changelog.json
+
+          script/changelog/post-generate-file.sh
       - name: Git commit
         run: |
           git config user.name $user_name

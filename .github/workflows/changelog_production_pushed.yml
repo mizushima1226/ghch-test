@@ -1,9 +1,11 @@
-name: Merge prd to main
+# NOTE: ChangeLog自動生成に関する詳細情報をまとめています↓
+# @see https://docs.google.com/document/d/1vRLu7KIPOgotDpa7aiEILq3buKmfvBnU1HpAQaam8cY/edit#
+name: Merge production to main
 
 on:
   push:
     branches:
-      - "prd"
+      - "production"
   workflow_dispatch:
 
 env:
@@ -18,7 +20,7 @@ jobs:
         run: cat $GITHUB_EVENT_PATH
       - uses: actions/checkout@v3
         with:
-          ref: prd
+          ref: production
           fetch-depth: 0
       - name: Git commit
         run: |
@@ -29,24 +31,21 @@ jobs:
           git switch main
 
           set +e
-          git diff main..prd -- changelog.json –exit-code
+          git diff main..production -- public/changelog.json –exit-code
           exists_diff=$?
           set -e
 
-          echo $exists_diff
           if [ $exists_diff -eq 0 ]; then
-            git merge prd
+            git merge production
             git push origin main
-            exit 1
           else
             echo "差分はありません"
-            exit 1
           fi
       - name: Notify slack
         uses: rtCamp/action-slack-notify@v2.0.2
         if: failure()
         env:
-          SLACK_CHANNEL: 通知テスト
+          SLACK_CHANNEL: pj-mieruka-pulse
           SLACK_TITLE: "[Ogawa Finder] mainブランチへのmergeに失敗しました"
           SLACK_MESSAGE: コンフリクトしている場合、手動操作にて、コンフリクト解消・mainブランチへのpushを実施してください
           SLACK_COLOR: "#EDB22F"

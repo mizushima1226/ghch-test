@@ -1,10 +1,12 @@
+# NOTE: ChangeLog自動生成に関する詳細情報をまとめています↓
+# @see https://docs.google.com/document/d/1vRLu7KIPOgotDpa7aiEILq3buKmfvBnU1HpAQaam8cY/edit#
 name: Generate Change Log for production
 
 on:
   pull_request:
     types: [opened]
     branches:
-      - "prd"
+      - "production"
   workflow_dispatch:
 
 env:
@@ -22,7 +24,7 @@ jobs:
         run: cat $GITHUB_EVENT_PATH
       - uses: actions/checkout@v3
         with:
-          ref: stg
+          ref: staging
           fetch-depth: 0
       - name: Git tag
         run: |
@@ -36,17 +38,20 @@ jobs:
         uses: ./.github/actions/generate
         with:
           token: ${{secrets.GITHUB_TOKEN}}
-          branch: stg
+          branch: staging
       - name: Post Generate file
         run: |
           # Changelog生成のための一時ファイル(gitignore)
           mkdir generate
-          echo ${{ steps.generate.outputs.changelog }} > generate/latest_changelog.json
-          scripts/changelog/post-generate-file.sh
+
+          # 本当は後続のshに引数でJSON文字列を渡したいがうまくいかなかったので一時ファイルに保存
+          echo ${{ steps.generate.outputs.changelog }} > temp/generate/latest_changelog.json
+
+          script/changelog/post-generate-file.sh
       - name: Git commit
         run: |
           git config user.name $user_name
           git config user.email $user_email
           git add .
           git commit -m "chore: generate changelog for production"
-          git push origin stg
+          git push origin staging
