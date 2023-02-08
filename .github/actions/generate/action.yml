@@ -38,13 +38,22 @@ runs:
       run: |
         # 最新のchangelogを生成
         generated=$(ghch --latest)
+
+        # ghchの生成物から必要なプロパティのみを抽出
         filtered=$(echo $generated | jq '. | { changed_at: .changed_at, from_revision: .from_revision, to_revision: .to_revision, pull_requests: .pull_requests | map({title: .title}) }')
+
+        # tagをつけたcommit以降にさらにcommitが積まれると「from=最新のtag、to=空(最新コミット)」となるので除去
         filter_untagged=$(echo $filtered | jq '. | select(.to_revision != "")')
+
+        # PRのリストが空となる場合は除去
         filter_empty=$(echo $filter_untagged | jq '. | select(.pull_requests | length != 0)')
+
+        # PRのタイトルのprefixがfeat,fix以外のものは除去
         filter_type=$(echo $filter_empty | jq 'del(. | .pull_requests[] | select(.title | test("(feat|fix)") | not))')
+
+        # オブジェクトのリストを配列でラップ
         result=$(echo $filter_type | jq -s .)
-        echo $result
-        echo "changelog=$(echo $result)"
+
         echo "changelog='$(echo $result)'" > $GITHUB_OUTPUT
       env:
         GITHUB_TOKEN: ${{inputs.token}}

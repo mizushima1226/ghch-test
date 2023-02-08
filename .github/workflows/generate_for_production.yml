@@ -33,13 +33,17 @@ jobs:
 
           set +e
           git tag | grep $tag_stg
+          exists_tag=$?
+          set -e
+
           # 既存のstg.latestタグを削除
-          if [ $? = 0 ]; then
+          if [ $exists_tag = 0 ]; then
+            # stg.latestタグとセットになっているバージョンタグを取得
             commit_log=$(git show $tag_stg | grep commit)
             commit_hash=${commit_log#commit }
             tag_version=$(git tag -l --contains $commit_hash | grep -v $tag_stg)
 
-            # stg.latestタグをセットになっているバージョンタグ削除
+            # バージョンタグ削除
             git tag -d $tag_version
             git push origin --delete $tag_version
 
@@ -47,7 +51,6 @@ jobs:
             git tag -d $tag_stg
             git push origin --delete $tag_stg
           fi
-          set -e
 
           # 最新コミットにバージョンタグを付与
           tag_version=$(date "+%Y%m%d.%H.%M")
@@ -66,7 +69,7 @@ jobs:
 
           echo ${{ steps.generate.outputs.changelog }} > generate/latest_changelog.json
 
-          # stgの目印は除去
+           # 過去のstgの目印は除去
           cat changelog.json | jq '.[] | select(.is_staging | not)' | jq -s . > generate/current.json
           jq -s '.[0] + .[1]' generate/latest_changelog.json generate/current.json > generate/pre_changelog.json
           mv generate/pre_changelog.json changelog.json

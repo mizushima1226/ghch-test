@@ -25,12 +25,23 @@ jobs:
           git config user.name $user_name
           git config user.email $user_email
 
-          set +e
           git fetch
           git switch main
+
+          set +e
           git diff main..prd -- changelog.json –exit-code
-          if [ $? -eq 0 ]; then
+          exists_diff=$?
+          set -e
+
+          echo $exists_diff
+          if [ $exists_diff -eq 0 ]; then
             git merge prd
             git push origin main
+            exit 1
+          else
+            echo "差分はありません"
+            exit 1
           fi
-          set -e
+      - name: Notify slack
+        if: failure()
+        run: echo "todo slack 通知"
