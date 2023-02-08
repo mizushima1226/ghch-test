@@ -26,36 +26,11 @@ jobs:
           fetch-depth: 0
       - name: Git tag
         run: |
-          git config user.name $user_name
-          git config user.email $user_email
-
-          tag_stg=stg.latest
-
-          set +e
-          git tag | grep $tag_stg
-          exists_tag=$?
-          set -e
-
-          # 既存のstg.latestタグを削除
-          if [ $exists_tag = 0 ]; then
-            # stg.latestタグとセットになっているバージョンタグを取得
-            commit_log=$(git show $tag_stg | grep commit)
-            commit_hash=${commit_log#commit }
-            tag_version=$(git tag -l --contains $commit_hash | grep -v $tag_stg)
-
-            # バージョンタグ削除
-            git tag -d $tag_version
-            git push origin --delete $tag_version
-
-            # stg.latestタグ削除
-            git tag -d $tag_stg
-            git push origin --delete $tag_stg
-          fi
+          # 古いgit tagを削除
+          scripts/changelog/delete-old-tag.sh
 
           # 最新コミットにバージョンタグを付与
-          tag_version=$(date "+%Y%m%d.%H.%M")
-          git tag $tag_version
-          git push origin $tag_version
+          scripts/changelog/git-tag-latest-version.sh
       - name: Generate
         id: generate
         uses: ./.github/actions/generate
@@ -63,16 +38,7 @@ jobs:
           token: ${{secrets.GITHUB_TOKEN}}
           branch: stg
       - name: Post Generate file
-        run: |
-          # Changelog生成のための一時ファイル(gitignore)
-          mkdir generate
-
-          echo ${{ steps.generate.outputs.changelog }} > generate/latest_changelog.json
-
-           # 過去のstgの目印は除去
-          cat changelog.json | jq '.[] | select(.is_staging | not)' | jq -s . > generate/current.json
-          jq -s '.[0] + .[1]' generate/latest_changelog.json generate/current.json > generate/pre_changelog.json
-          mv generate/pre_changelog.json changelog.json
+        run: scripts/changelog/post-generate-file.sh ${{ steps.generate.outputs.changelog }}
       - name: Git commit
         run: |
           git config user.name $user_name
