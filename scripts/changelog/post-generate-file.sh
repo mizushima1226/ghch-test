@@ -3,9 +3,7 @@
 # Changelog生成のための一時ファイル(gitignore)
 mkdir generate
 
-json_string=$1
-
-echo json_string > generate/latest_changelog.json
+echo $1 > generate/latest_changelog.json
 
 # 過去のstgの目印は除去
 cat changelog.json | jq '.[] | select(.is_staging | not)' | jq -s . > generate/current.json
