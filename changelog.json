@@ -1,14 +1,13 @@
 [
   {
-    "changed_at": "2023-02-08T13:11:40+09:00",
+    "changed_at": "2023-02-08T13:12:46+09:00",
     "from_revision": "20230208.13.05",
-    "to_revision": "20230208.13.12",
+    "to_revision": "20230208.13.13",
     "pull_requests": [
       {
         "title": "feat: 機能HH"
       }
-    ],
-    "is_staging": true
+    ]
   },
   {
     "changed_at": "2023-02-08T13:05:06+09:00",
