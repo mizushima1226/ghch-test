@@ -43,5 +43,10 @@ jobs:
             exit 1
           fi
       - name: Notify slack
+        uses: rtCamp/action-slack-notify@v2.0.2
         if: failure()
-        run: echo "todo slack 通知"
+        env:
+          SLACK_CHANNEL: インフラ周りキャッチアップ
+          SLACK_TITLE: Ogawa Finder mainブランチへのmergeに失敗しました
+          SLACK_COLOR: danger
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
