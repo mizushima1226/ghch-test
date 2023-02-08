@@ -1,5 +1,16 @@
 [
   {
+    "changed_at": "2023-02-08T17:43:32+09:00",
+    "from_revision": "20230208.17.41",
+    "to_revision": "20230208.17.44",
+    "pull_requests": [
+      {
+        "title": "feat: 機能MM"
+      }
+    ],
+    "is_staging": true
+  },
+  {
     "changed_at": "2023-02-08T17:40:32+09:00",
     "from_revision": "20230208.17.33",
     "to_revision": "20230208.17.41",
