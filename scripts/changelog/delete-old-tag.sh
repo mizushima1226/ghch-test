@@ -13,8 +13,8 @@ set -e
 # 既存のstg.latestタグを削除
 if [ $exists_tag = 0 ]; then
   # stg.latestタグとセットになっているバージョンタグを取得
-  commit_log=`git show $tag_stg | grep commit` # commit xxx
-  commit_hash=(${commit_log//commit / }) # xxx
+  commit_log=`git show $tag_stg | grep commit` # commit 12345
+  commit_hash=`echo $commit_log | cut -d ' ' -f 2` # 12345
   tag_version=`git tag -l --contains $commit_hash | grep -v $tag_stg` # yyyymmdd.hh.mm
 
   # バージョンタグ削除
