@@ -50,7 +50,7 @@ jobs:
           echo $marked_stg
 
           # Changelog生成のための一時ファイル(gitignore)
-          mkdir generate
+          mkdir temp/generate
 
           # 本当は後続のshに引数でJSON文字列を渡したいがうまくいかなかったので一時ファイルに保存
           echo $marked_stg > temp/generate/latest_changelog.json
