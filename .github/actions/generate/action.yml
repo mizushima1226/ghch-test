@@ -40,16 +40,39 @@ runs:
         generated=$(ghch --latest)
 
         # ghchの生成物から必要なプロパティのみを抽出
+        # 抽出後
+        # {
+        #   "changed_at": "2023-02-08T13:12:46+09:00",
+        #   "from_revision": "20230208.13.05",
+        #   "to_revision": "20230208.13.13",
+        #   "pull_requests": [
+        #     {
+        #       "title": "feat: 機能A"
+        #     }
+        #   ]
+        # }
         filtered=$(echo $generated | jq '. | { changed_at: .changed_at, from_revision: .from_revision, to_revision: .to_revision, pull_requests: .pull_requests | map({title: .title}) }')
 
-        # tagをつけたcommit以降にさらにcommitが積まれると「from=最新のtag、to=空(最新コミット)」となるので除去
-        filter_untagged=$(echo $filtered | jq '. | select(.to_revision != "")')
-
-        # PRのリストが空となる場合は除去
-        filter_empty=$(echo $filter_untagged | jq '. | select(.pull_requests | length != 0)')
-
         # PRのタイトルのprefixがfeat,fix以外のものは除去
-        filter_type=$(echo $filter_empty | jq 'del(. | .pull_requests[] | select(.title | test("(feat|fix)") | not))')
+        # 除去前
+        # "pull_requests": [
+        #   {
+        #     "title": "release(stg): 20230208_02"
+        #   },
+        #   {
+        #     "title": "feat: 機能A"
+        #   },
+        #   {
+        #     "title": "chore: rename"
+        #   }
+        # ]
+        # 除去後
+        # "pull_requests": [
+        #   {
+        #     "title": "feat: 機能A"
+        #   }
+        # ]
+        filter_type=$(echo $filtered | jq 'del(. | .pull_requests[] | select(.title | test("(feat|fix)") | not))')
 
         # オブジェクトのリストを配列でラップ
         result=$(echo $filter_type | jq -s .)
