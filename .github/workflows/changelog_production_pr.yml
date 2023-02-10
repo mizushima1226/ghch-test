@@ -44,11 +44,11 @@ jobs:
           # Changelog生成のための一時ファイル(gitignore)
           mkdir -p temp/generate
 
-          base_path="temp/generate/"
+          base_path="temp/generate"
           file_name="latest_changelog.json"
-          echo ${{ steps.generate.outputs.changelog }} > $base_path$file_name
+          echo ${{ steps.generate.outputs.changelog }} > ${base_path}/${file_name}
 
-          scripts/changelog/add-generated-file-to-public.sh $base_path $file_name
+          scripts/changelog/add-to-public.sh $base_path $file_name
       - name: Git commit
         run: |
           git config user.name $user_name
