@@ -1,14 +1,13 @@
 [
   {
-    "changed_at": "2023-02-10T11:32:18+09:00",
+    "changed_at": "2023-02-10T11:34:12+09:00",
     "from_revision": "20230210.11.22",
-    "to_revision": "20230210.11.33",
+    "to_revision": "20230210.11.34",
     "pull_requests": [
       {
         "title": "feat: 機能RR"
       }
-    ],
-    "is_staging": true
+    ]
   },
   {
     "changed_at": "2023-02-10T11:21:34+09:00",
