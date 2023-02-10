@@ -29,10 +29,10 @@ jobs:
       - name: Git tag
         run: |
           # 古いgit tagを削除
-          script/changelog/delete-old-tag.sh
+          scripts/changelog/delete-old-tag.sh
 
           # 最新コミットにバージョンタグを付与
-          script/changelog/git-tag-latest-version.sh
+          scripts/changelog/git-tag-latest-version.sh
 
           # 最新コミットにstg.latestタグを付与
           git tag stg.latest
@@ -52,10 +52,11 @@ jobs:
           # Changelog生成のための一時ファイル(gitignore)
           mkdir -p temp/generate
 
-          # 本当は後続のshに引数でJSON文字列を渡したいがうまくいかなかったので一時ファイルに保存
-          echo $marked_stg > temp/generate/latest_changelog.json
+          base_path="temp/generate/"
+          file_name="latest_changelog.json"
+          echo $marked_stg > $base_path$file_name
 
-          script/changelog/post-generate-file.sh
+          scripts/changelog/add-generated-file-to-public.sh $base_path $file_name
       - name: Git commit
         run: |
           git config user.name $user_name
