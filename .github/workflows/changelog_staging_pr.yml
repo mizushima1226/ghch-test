@@ -32,7 +32,7 @@ jobs:
           scripts/changelog/delete-old-tag.sh
 
           # 最新コミットにバージョンタグを付与
-          scripts/changelog/git-tag-latest-version.sh
+          scripts/changelog/add-version-tag.sh
 
           # 最新コミットにstg.latestタグを付与
           git tag stg.latest
