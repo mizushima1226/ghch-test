@@ -1,5 +1,16 @@
 [
   {
+    "changed_at": "2023-02-10T11:21:34+09:00",
+    "from_revision": "20230210.10.19",
+    "to_revision": "20230210.11.22",
+    "pull_requests": [
+      {
+        "title": "feat: 機能QQ"
+      }
+    ],
+    "is_staging": true
+  },
+  {
     "changed_at": "2023-02-10T10:18:13+09:00",
     "from_revision": "20230210.09.44",
     "to_revision": "20230210.10.19",
