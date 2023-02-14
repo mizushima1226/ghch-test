@@ -23,5 +23,4 @@ jobs:
             fix
             docs
             chore
-            release
           requireScope: false
