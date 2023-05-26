@@ -74,7 +74,7 @@ runs:
         # ]
         filter_type=$(echo $filtered | jq 'del(. | .pull_requests[] | select(.title | test("(feat|fix)") | not))')
 
-        reversed=$(echo $filter_type | jq '.pull_requests[] | reverse')
+        reversed=$(echo $filter_type | jq 'reverse')
 
         # オブジェクトのリストを配列でラップ
         result=$(echo $reversed | jq -s .)
