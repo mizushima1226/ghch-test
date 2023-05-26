@@ -41,7 +41,7 @@ jobs:
         id: generate
         uses: ./.github/actions/generate
         with:
-          token: ${{secrets.TOKEN}}
+          token: "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"
           branch: main
       - name: Post Generate file
         run: |
