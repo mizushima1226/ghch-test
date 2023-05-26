@@ -108,10 +108,10 @@ runs:
         #     }
         #   ]
         # }
-        replaced=$(echo $filter_type | jq '.pull_requests |= '$reversed)
+        # replaced=$(echo $filter_type | jq '.pull_requests |= '$reversed)
 
         # オブジェクトのリストを配列でラップ
-        result=$(echo $replaced | jq -s .)
+        result=$(echo $filter_type | jq -s .)
 
         echo "changelog='$(echo $result)'" > $GITHUB_OUTPUT
       env:
