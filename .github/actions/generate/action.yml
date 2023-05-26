@@ -47,6 +47,9 @@ runs:
         #   "to_revision": "20230208.13.13",
         #   "pull_requests": [
         #     {
+        #       "title": "feat: 機能B"
+        #     },
+        #     {
         #       "title": "feat: 機能A"
         #     }
         #   ]
@@ -60,6 +63,9 @@ runs:
         #     "title": "release(stg): 20230208_02"
         #   },
         #   {
+        #     "title": "feat: 機能B"
+        #   },
+        #   {
         #     "title": "feat: 機能A"
         #   },
         #   {
@@ -69,17 +75,43 @@ runs:
         # 除去後
         # "pull_requests": [
         #   {
+        #     "title": "feat: 機能B"
+        #   },
+        #   {
         #     "title": "feat: 機能A"
         #   }
         # ]
         filter_type=$(echo $filtered | jq 'del(. | .pull_requests[] | select(.title | test("(feat|fix)") | not))')
 
-        echo $filter_type
+        # PRの並びを日付の降順から昇順へリバース
+        # [
+        #   {
+        #     "title": "feat: 機能A"
+        #   },
+        #   {
+        #     "title": "feat: 機能B"
+        #   }
+        # ]
+        reversed=$(echo $filter_type | jq '.pull_requests | reverse')
 
-        reversed=$(echo $filter_type | jq 'reverse')
+        # リバースしたPRのリストで値を置換
+        # {
+        #   "changed_at": "2023-02-08T13:12:46+09:00",
+        #   "from_revision": "20230208.13.05",
+        #   "to_revision": "20230208.13.13",
+        #   "pull_requests": [
+        #     {
+        #       "title": "feat: 機能A"
+        #     },
+        #     {
+        #       "title": "feat: 機能B"
+        #     }
+        #   ]
+        # }
+        replaced=$(echo $filter_type | jq '.pull_requests |= '$reversed)
 
         # オブジェクトのリストを配列でラップ
-        result=$(echo $reversed | jq -s .)
+        result=$(echo $replaced | jq -s .)
 
         echo "changelog='$(echo $result)'" > $GITHUB_OUTPUT
       env:
