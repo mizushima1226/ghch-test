@@ -74,8 +74,10 @@ runs:
         # ]
         filter_type=$(echo $filtered | jq 'del(. | .pull_requests[] | select(.title | test("(feat|fix)") | not))')
 
+        reversed=$(echo $filter_type | jq '.pull_requests[] | reverse')
+
         # オブジェクトのリストを配列でラップ
-        result=$(echo $filter_type | jq -s .)
+        result=$(echo $reversed | jq -s .)
 
         echo "changelog='$(echo $result)'" > $GITHUB_OUTPUT
       env:
