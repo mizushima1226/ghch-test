@@ -92,7 +92,7 @@ runs:
         #     "title": "feat: 機能B"
         #   }
         # ]
-        reversed=$(echo $filter_type | jq '.pull_requests | reverse')
+        # reversed=$(echo $filter_type | jq '.pull_requests | reverse')
 
         # リバースしたPRのリストで値を置換
         # {
