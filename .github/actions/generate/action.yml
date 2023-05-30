@@ -109,7 +109,7 @@ runs:
         #     }
         #   ]
         # }
-        replaced=$(echo $filter_type | jq '.pull_requests |= '$reversed)
+        replaced=$(echo "$filter_type" | jq --argjson reversed "$reversed" '.pull_requests |= $reversed')
 
 
         # オブジェクトのリストを配列でラップ
