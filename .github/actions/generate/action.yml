@@ -108,8 +108,7 @@ runs:
         #     }
         #   ]
         # }
-        replaced=$(echo $filter_type | jq '.pull_requests |= '$reversed)
-
+        replaced=$(echo $filter_type | jq --arg arg1 $reversed '.pull_requests |= $arg1')
 
         # オブジェクトのリストを配列でラップ
         result=$(echo $replaced | jq -s .)
