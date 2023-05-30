@@ -93,7 +93,6 @@ runs:
         #   }
         # ]
         reversed=$(echo $filter_type | jq '.pull_requests | reverse')
-        reversed=$(echo $reversed | tr -d '\n') # gh actionsでは改行を除去しないと、次のreplacedの処理で失敗する
 
         # リバースしたPRのリストで値を置換
         # {
