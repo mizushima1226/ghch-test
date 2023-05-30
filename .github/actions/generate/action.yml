@@ -93,6 +93,7 @@ runs:
         #   }
         # ]
         reversed=$(echo $filter_type | jq '.pull_requests | reverse')
+        reversed=$(echo $reversed | tr -d '\n') # gh actionsでは改行を除去しないと、次のreplacedの処理で失敗する
 
         # リバースしたPRのリストで値を置換
         # {
@@ -108,7 +109,8 @@ runs:
         #     }
         #   ]
         # }
-        replaced=$(echo $filter_type | jq --arg arg1 $reversed '.pull_requests |= $arg1')
+        replaced=$(echo $filter_type | jq '.pull_requests |= '$reversed)
+
 
         # オブジェクトのリストを配列でラップ
         result=$(echo $replaced | jq -s .)
