@@ -60,6 +60,12 @@ jobs:
         run: |
           git config user.name $user_name
           git config user.email $user_email
-          git add .
-          git commit -m "chore: generate changelog for production"
-          git push origin staging
+
+          if git diff --quiet; then
+            echo "差分がないためスキップします"
+            exit 0
+          else
+            git add .
+            git commit -m "chore: generate changelog for production"
+            git push origin staging
+          fi
