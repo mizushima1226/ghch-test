@@ -1,8 +1,8 @@
 [
   {
-    "changed_at": "2023-05-30T14:35:02+09:00",
+    "changed_at": "2023-09-15T15:53:30+09:00",
     "from_revision": "20230530.14.32",
-    "to_revision": "20230530.14.35",
+    "to_revision": "20230915.15.54",
     "pull_requests": [
       {
         "title": "feat: 49"
