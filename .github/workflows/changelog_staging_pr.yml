@@ -41,10 +41,17 @@ jobs:
         id: generate
         uses: ./.github/actions/generate
         with:
-          token: ${{secrets.TOKEN}}
+          token: ${{secrets.GITHUB_TOKEN}}
           branch: main
       - name: Post Generate file
         run: |
+          pull_requests_count=$(echo ${{ steps.generate.outputs.changelog }} | jq '.[0].pull_requests | length')
+
+          if [ "$pull_requests_count" -eq 0 ]; then
+            echo "pull_requestsの要素数は0件のため、自動生成をスキップします"
+            exit 0
+          fi
+
           # 最新のchangelogにstgの目印を付与する
           marked_stg=$(echo ${{ steps.generate.outputs.changelog }} | jq '.[0] |= .+ {"is_staging": true}')
           echo $marked_stg
@@ -54,8 +61,8 @@ jobs:
 
           base_path="temp/generate"
           file_name="latest_changelog.json"
-          echo $marked_stg > ${base_path}/${file_name}
 
+          echo $marked_stg > ${base_path}/${file_name}
           scripts/changelog/add-to-public.sh $base_path $file_name
       - name: Git commit
         run: |
