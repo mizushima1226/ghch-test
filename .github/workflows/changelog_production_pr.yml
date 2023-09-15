@@ -41,21 +41,21 @@ jobs:
           branch: staging
       - name: Post Generate file
         run: |
+          pull_requests_count=$(echo ${{ steps.generate.outputs.changelog }} | jq '.[0].pull_requests | length')
+
+          if [ "$pull_requests_count" -eq 0 ]; then
+            echo "pull_requestsの要素数は0件のため、自動生成をスキップします"
+            exit 0
+          fi
+
           # Changelog生成のための一時ファイル(gitignore)
           mkdir -p temp/generate
 
           base_path="temp/generate"
           file_name="latest_changelog.json"
 
-          pull_requests_count=$(echo ${{ steps.generate.outputs.changelog }} | jq '.[0].pull_requests | length')
-
-          if [ "$pull_requests_count" -eq 0 ]; then
-            echo "pull_requestsの要素数は0件のため、自動生成をスキップします"
-            exit 0
-          else
-            echo ${{ steps.generate.outputs.changelog }} > ${base_path}/${file_name}
-            scripts/changelog/add-to-public.sh $base_path $file_name
-          fi
+          echo ${{ steps.generate.outputs.changelog }} > ${base_path}/${file_name}
+          scripts/changelog/add-to-public.sh $base_path $file_name
       - name: Git commit
         run: |
           git config user.name $user_name
